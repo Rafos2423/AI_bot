@@ -1,3 +1,4 @@
+from Generate.data import create_theme
 from config import dp, logger
 
 
@@ -16,6 +17,13 @@ async def reset_state():
 async def change_state(name):
     await reset_state()
     await set_state(name)
+
+
+async def set_theme(txt, answer):
+    create_theme(txt)
+    print_log('theme', txt)
+    await change_state('enable')
+    await answer.answer('Отлично, я готов к использованию')
 
 
 def print_log(tag, desc=''):
