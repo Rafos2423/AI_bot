@@ -13,7 +13,7 @@ storage = MemoryStorage()
 dp = Dispatcher(bot, storage=MemoryStorage())
 
 handler = logging.StreamHandler(sys.stdout)
-formatter = logging.Formatter('\033[1;0m%(asctime)s - \033[1;32m%(message)s')
+formatter = logging.Formatter('\033[1;37m%(asctime)s - \033[1;33m%(message)s')
 handler.setFormatter(formatter)
 logger = logging.getLogger('my_logger')
 logger.addHandler(handler)

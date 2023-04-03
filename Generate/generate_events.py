@@ -17,6 +17,6 @@ def start_generate(ask):
     start = time.time()
     answer = generate()
     duration = round(time.time() - start, 2)
-    print_log(f'scs - {duration}s', answer)
+    print_log(f'scs - \033[1;36m{duration}s', answer)
     msg_history.append({'role': 'assistant', 'content': answer})
     return answer

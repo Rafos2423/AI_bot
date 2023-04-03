@@ -30,4 +30,4 @@ def print_log(tag, desc=''):
     inline = desc.replace("\n", "") if desc != '' else ''
     if desc != '':
         inline = f'- {inline}'
-    logger.info(f'{tag} {inline}')
+    logger.info(f'{tag} \033[1;0m{inline}')
