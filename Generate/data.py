@@ -9,7 +9,7 @@ def create_theme(theme):
 
 def generate():
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="gpt-3.5-turbo-0301",
         messages=msg_history
     )
     return response['choices'][0]['message']['content']
