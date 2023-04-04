@@ -1,6 +1,7 @@
 import openai
 
 msg_history = []
+is_end = [False]
 
 
 def create_theme(theme):
@@ -8,8 +9,13 @@ def create_theme(theme):
 
 
 def generate():
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-0301",
-        messages=msg_history
-    )
-    return response['choices'][0]['message']['content']
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo-0301",
+            messages=msg_history
+        )
+        return response['choices'][0]['message']['content']
+    except BaseException:
+        is_end[0] = True
+
+

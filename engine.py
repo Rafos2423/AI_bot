@@ -1,5 +1,6 @@
 from Generate.data import create_theme
 from config import dp, logger
+from colorama import Fore
 
 
 def is_msg(msg):
@@ -26,8 +27,20 @@ async def set_theme(txt, answer):
     await answer.answer('Отлично, я готов к использованию')
 
 
-def print_log(tag, desc=''):
-    inline = desc.replace("\n", "") if desc != '' else ''
-    if desc != '':
-        inline = f'- {inline}'
-    logger.info(f'{tag} \033[1;0m{inline}')
+def print_log(name, tag):
+    if tag == 'clear':
+        tag = Fore.LIGHTRED_EX + f'{tag}\n'
+    logger.info(f'@{name} - {Fore.LIGHTYELLOW_EX + tag}')
+
+
+def print_msg_log(name, text, tag):
+    text = text.replace("\n", "")
+    logger.info(f'@{name} {dash} {Fore.LIGHTYELLOW_EX + tag} {dash} {Fore.LIGHTMAGENTA_EX + str(len(text))} {dash} {Fore.LIGHTWHITE_EX + text}')
+
+
+def print_scs_log(name, text, tag, duration):
+    text = text.replace("\n", "")
+    logger.info(f'@{name} {dash} {Fore.LIGHTYELLOW_EX + tag} {dash} {Fore.LIGHTMAGENTA_EX + str(len(text))} {dash} {Fore.LIGHTCYAN_EX + str(duration)}s {dash} {Fore.LIGHTWHITE_EX + text}\n')
+
+
+dash = Fore.WHITE + '-'

@@ -2,7 +2,7 @@ from aiogram import types
 from Generate.data import msg_history
 from Generate.generate_events import start_generate
 from config import dp
-from engine import print_log, change_state, reset_state
+from engine import print_log, change_state, reset_state, print_msg_log
 from Buttons.buttons import keyboard_yes_no
 
 
@@ -10,7 +10,8 @@ from Buttons.buttons import keyboard_yes_no
 async def repeat(message):
     msg_history.pop()
     msg = msg_history.pop()['content']
-    answer = start_generate(msg)
+    print_msg_log(message.from_user.username, msg, 'rep')
+    answer = start_generate(message.from_user.username, msg)
     await message.answer(answer)
 
 
@@ -25,7 +26,7 @@ async def new_chat(message):
 async def new_chat(query):
     msg_history.clear()
     await reset_state()
-    print_log('--clear--')
+    print_log(query.from_user.username, 'clear')
     await query.message.answer(f'Сообщения удалены. Можно выбрать новую тему /start', reply_markup=types.ReplyKeyboardRemove())
 
 
