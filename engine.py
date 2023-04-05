@@ -1,4 +1,4 @@
-from Generate.data import create_theme
+from Generate.data import add_msg
 from config import dp, logger
 from colorama import Fore
 
@@ -18,13 +18,6 @@ async def reset_state():
 async def change_state(name):
     await reset_state()
     await set_state(name)
-
-
-async def set_theme(txt, answer):
-    create_theme(txt)
-    print_log('theme', txt)
-    await change_state('enable')
-    await answer.answer('Отлично, я готов к использованию')
 
 
 def print_log(name, tag):

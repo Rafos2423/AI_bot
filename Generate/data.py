@@ -3,8 +3,8 @@ import openai
 msg_history = []
 
 
-def create_theme(theme):
-    msg_history.append({'role': 'system', 'content': theme})
+def add_msg(role, theme):
+    msg_history.append({'role': role, 'content': theme})
 
 
 def generate():
@@ -13,5 +13,4 @@ def generate():
         messages=msg_history
     )
     return response['choices'][0]['message']['content']
-
 

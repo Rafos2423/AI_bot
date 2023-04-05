@@ -1,5 +1,5 @@
 from aiogram import types
-from Generate.data import msg_history
+from Generate.data import msg_history, add_msg
 from Generate.generate_events import start_generate
 from config import dp
 from engine import print_log, change_state, reset_state, print_msg_log
@@ -11,19 +11,18 @@ async def repeat(message):
     msg_history.pop()
     msg = msg_history.pop()['content']
     print_msg_log(message.from_user.username, msg, 'rep')
-    msg_history.append({'role': 'user', 'content': message.text})
-    answer = start_generate(message.from_user.username, msg)
+    add_msg('user', message.text)
+    answer = start_generate(message.from_user.username)
     await message.answer(answer)
 
 
-@dp.message_handler(lambda x: x.text == 'Новый чат ⏩' and len(msg_history) > 1, state=['enable', 'new_chat'])
+@dp.message_handler(lambda x: x.text == 'Новый чат ⏩' and len(msg_history) > 1, state='enable')
 async def new_chat(message):
-    await change_state('new_chat')
     theme = f'на тему {msg_history[0]["content"]} ' if msg_history[0]['role'] == 'system' else ''
     await message.answer(f'Память аи {theme}будет очищена. Начать новый чат?', reply_markup=keyboard_yes_no)
 
 
-@dp.callback_query_handler(text='yes', state='new_chat')
+@dp.callback_query_handler(text='yes', state='enable')
 async def new_chat(query):
     msg_history.clear()
     await reset_state()

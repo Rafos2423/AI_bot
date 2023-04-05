@@ -26,16 +26,17 @@ async def choose_theme(query):
         await query.message.answer('Можно и так, задавай вопрос')
         await reset_state()
     else:
-        create_theme(query.data)
-        print_msg_log(query.from_user.username, query.data, 'theme')
-        await change_state('enable')
-        await query.message.answer('Отлично, я готов к использованию')
+        await set_theme(query.from_user.username, query.message, query.data)
 
 
 @dp.message_handler(lambda x: is_msg(x.text), state='choose_theme')
 async def input_theme(message):
-    create_theme(message.text)
-    print_msg_log(message.from_user.username, message.text, 'theme')
+    await set_theme(message.from_user.username, message, message.text)
+
+
+async def set_theme(name, msg, text):
+    add_msg('system', text)
+    print_msg_log(name, 'theme', text)
     await change_state('enable')
-    await message.answer('Отлично, я готов к использованию')
+    await msg.answer('Отлично, я готов к использованию')
 
