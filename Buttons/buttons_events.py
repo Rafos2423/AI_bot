@@ -11,6 +11,7 @@ async def repeat(message):
     msg_history.pop()
     msg = msg_history.pop()['content']
     print_msg_log(message.from_user.username, msg, 'rep')
+    msg_history.append({'role': 'user', 'content': message.text})
     answer = start_generate(message.from_user.username, msg)
     await message.answer(answer)
 
