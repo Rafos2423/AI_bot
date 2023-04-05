@@ -1,32 +1,26 @@
 from aiogram import types
-from Generate.data import msg_history, add_msg
-from Generate.generate_events import start_generate
+from Generate.data import msg_history
+from Generate.generate_events import correct_generate, clear_history
 from config import dp
-from engine import print_log, change_state, reset_state, print_msg_log
+from engine import change_state
 from Buttons.buttons import keyboard_yes_no
 
 
 @dp.message_handler(lambda x: x.text == 'Повтор 🔄' and len(msg_history) > 1, state='enable')
 async def repeat(message):
-    msg_history.pop()
-    msg = msg_history.pop()['content']
-    print_msg_log(message.from_user.username, msg, 'rep')
-    add_msg('user', message.text)
-    answer = start_generate(message.from_user.username)
-    await message.answer(answer)
+    repeat = msg_history[len(msg_history) - 2]['content']
+    await correct_generate(message.from_user.username, repeat, message.answer)
 
 
 @dp.message_handler(lambda x: x.text == 'Новый чат ⏩' and len(msg_history) > 1, state='enable')
-async def new_chat(message):
+async def new_chat_menu(message):
     theme = f'на тему {msg_history[0]["content"]} ' if msg_history[0]['role'] == 'system' else ''
     await message.answer(f'Память аи {theme}будет очищена. Начать новый чат?', reply_markup=keyboard_yes_no)
 
 
 @dp.callback_query_handler(text='yes', state='enable')
 async def new_chat(query):
-    msg_history.clear()
-    await reset_state()
-    print_log(query.from_user.username, 'clear')
+    await clear_history(query.from_user.username)
     await query.message.answer(f'Сообщения удалены. Можно выбрать новую тему /start', reply_markup=types.ReplyKeyboardRemove())
 
 
