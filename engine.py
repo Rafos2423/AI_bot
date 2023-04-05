@@ -27,6 +27,8 @@ def print_log(name, tag):
 
 
 def print_msg_log(name, text, tag):
+    if tag == 'theme':
+        tag = Fore.LIGHTGREEN_EX + tag
     text = text.replace("\n", "")
     logger.info(f'@{name} {dash} {Fore.LIGHTYELLOW_EX + tag} {dash} {Fore.LIGHTMAGENTA_EX + str(len(text))} {dash} {Fore.LIGHTWHITE_EX + text}')
 

@@ -9,7 +9,7 @@ async def first_state(message):
         await set_state('choose_theme')
         await start(message)
     else:
-        print_log(message.from_user.username, 'no theme')
+        print_msg_log(message.from_user.username, 'Без темы', 'theme')
         await set_state('enable')
         await get_answer(message)
 
