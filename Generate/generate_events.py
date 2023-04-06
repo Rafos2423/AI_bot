@@ -1,6 +1,5 @@
 from Generate.generate import msg_history, generate
-from config import dp
-from engine import is_msg, print_msg_log, print_scs_log, print_log, reset_state
+from engine import *
 from Buttons.buttons import keyboard
 import time
 
