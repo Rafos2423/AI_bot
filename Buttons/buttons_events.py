@@ -8,7 +8,7 @@ from Buttons.buttons import keyboard_yes_no
 
 @dp.message_handler(lambda x: x.text == 'Повтор 🔄' and len(msg_history) > 1, state='enable')
 async def repeat(message):
-    repeat = msg_history[len(msg_history) - 2]['content']
+    repeat = find_last_user_msg()
     await correct_generate(message.from_user.username, repeat, message.answer)
 
 
@@ -28,3 +28,9 @@ async def new_chat(query):
 async def back(query):
     await change_state('enable')
     await query.message.answer('Давай продолжим')
+
+
+def find_last_user_msg():
+    for msg in msg_history[::-1]:
+        if msg['role'] == 'user':
+            return msg['content']
