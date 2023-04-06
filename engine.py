@@ -22,20 +22,18 @@ async def change_state(name):
 
 def print_log(name, tag):
     if tag == 'clear':
-        tag = Fore.LIGHTRED_EX + f'{tag}\n'
+        tag = Fore.LIGHTRED_EX + f'{tag}'
     logger.info(f'@{name} - {Fore.LIGHTYELLOW_EX + tag}')
 
 
 def print_msg_log(name, text, tag):
-    if tag == 'theme':
-        tag = Fore.LIGHTGREEN_EX + tag
     text = text.replace("\n", "")
     logger.info(f'@{name} {dash} {Fore.LIGHTYELLOW_EX + tag} {dash} {Fore.LIGHTMAGENTA_EX + str(len(text))} {dash} {Fore.LIGHTWHITE_EX + text}')
 
 
 def print_scs_log(name, text, tag, duration):
     text = text.replace("\n", "")
-    logger.info(f'@{name} {dash} {Fore.LIGHTYELLOW_EX + tag} {dash} {Fore.LIGHTMAGENTA_EX + str(len(text))} {dash} {Fore.LIGHTCYAN_EX + str(duration)}s {dash} {Fore.LIGHTWHITE_EX + text}\n')
+    logger.info(f'@{name} {dash} {Fore.LIGHTGREEN_EX + tag} {dash} {Fore.LIGHTMAGENTA_EX + str(len(text))} {dash} {Fore.LIGHTCYAN_EX + str(duration)}s {dash} {Fore.LIGHTWHITE_EX + text}')
 
 
 dash = Fore.WHITE + '-'
