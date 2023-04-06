@@ -1,4 +1,4 @@
-from Generate.data import msg_history, generate
+from Generate.generate import msg_history, generate
 from config import dp
 from engine import is_msg, print_msg_log, print_scs_log, print_log, reset_state
 from Buttons.buttons import keyboard
@@ -12,17 +12,18 @@ async def get_answer(message):
 
 async def correct_generate(name, text, answer):
     try:
-        result = start_generate(name, text)
-        await answer(result, reply_markup=keyboard)
-    except BaseException:
+        result = await start_generate(name, text)
+    except:
         await clear_history(name)
-        await answer('Количество ответов аи закончилось. Можно начать новый диалог, выбрав новую тему /start', reply_markup=None)
+        await answer('Количество ответов аи закончилось. Придется начать новый диалог, выбрав новую тему /start', reply_markup=None)
+    else:
+        await answer(result, reply_markup=keyboard)
 
 
-def start_generate(name, text):
+async def start_generate(name, text):
     print_msg_log(name, text, 'ask')
     start = time.time()
-    answer = generate(text)
+    answer = await generate(text)
     duration = round(time.time() - start, 2)
     print_scs_log(name, answer, 'ans', duration)
     return answer

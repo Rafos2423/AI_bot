@@ -1,5 +1,5 @@
 from aiogram import types
-from Generate.data import msg_history
+from Generate.generate import msg_history
 from Generate.generate_events import correct_generate, clear_history
 from config import dp
 from engine import change_state

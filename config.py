@@ -1,11 +1,10 @@
 from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-import openai
 import logging
 import sys
 
-openai.api_key = open('Tokens/API_key', 'r').read()
+api_key = open('Tokens/API_key', 'r').read()
 tg_token = open('Tokens/TG_token', 'r').read()
 
 bot = Bot(tg_token)

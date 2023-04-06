@@ -1,4 +1,4 @@
-from Generate.data import add_msg
+from Generate.generate import add_msg
 from config import dp, logger
 from colorama import Fore
 
