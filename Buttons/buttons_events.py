@@ -8,8 +8,8 @@ from Buttons.buttons import keyboard_yes_no
 
 @dp.message_handler(lambda x: x.text == 'Повтор 🔄' and len(msg_history) > 1, state='enable')
 async def repeat(message):
-    repeat = find_last_user_msg()
-    await correct_generate(message.from_user.username, repeat, message.answer)
+    rep = find_last_user_msg()
+    await correct_generate(message.from_user.username, rep, message.answer)
 
 
 @dp.message_handler(lambda x: x.text == 'Новый чат ⏩' and len(msg_history) > 1, state='enable')

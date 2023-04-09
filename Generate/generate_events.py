@@ -12,7 +12,8 @@ async def get_answer(message):
 async def correct_generate(name, text, answer):
     try:
         result = await start_generate(name, text)
-    except:
+    except ChildProcessError:
+        print_msg_log(name, "no tokens", "clear")
         await clear_history(name)
         await answer('Количество ответов аи закончилось. Придется начать новый диалог, выбрав новую тему /start', reply_markup=None)
     else:

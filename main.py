@@ -8,4 +8,7 @@ import Generate.generate_events
 import Audio.audio_events
 import no_available_event
 
-executor.start_polling(dp, on_shutdown=shutdown)
+try:
+    executor.start_polling(dp, on_shutdown=shutdown)
+except TypeError:
+    pass
