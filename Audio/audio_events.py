@@ -1,3 +1,4 @@
+import pyperclip
 from pydub import AudioSegment
 import aiohttp
 from aiogram.types import ContentType

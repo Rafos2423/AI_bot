@@ -1,5 +1,5 @@
-import os
 import shutil
+import pyperclip
 from Generate.generate import msg_history, generate
 from engine import *
 from Buttons.buttons import keyboard
@@ -13,7 +13,9 @@ async def get_answer(message):
 
 async def correct_generate(name, text, answer):
     try:
+        pyperclip.copy(text)
         result = await start_generate(name, text)
+        pyperclip.copy(result)
     except ChildProcessError:
         await clear_history(name, 'Закончились токены')
         await answer('Количество ответов аи закончилось. Придется начать новый диалог, выбрав новую тему /start', reply_markup=None)

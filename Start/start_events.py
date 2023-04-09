@@ -3,14 +3,7 @@ from Audio.audio_events import get_answer_voice, voice_to_text
 from Start.themes import keyboard_themes, themes
 from engine import *
 from Generate.generate_events import get_answer
-
-
-@dp.message_handler(lambda x: x.text == '/info', state=[None, 'enable'])
-async def info(message):
-    await message.answer('Бот позволяет получать ответы с помощью API OpenAI на текстовые и аудио сообщения.\n'
-                         'Ограничения на аудио:\n'
-                         'Размер: 25 мб\n'
-                         'Формат: mp3, mp4, mpeg, mpga, m4a, wav, webm')
+import pyperclip
 
 
 @dp.message_handler(commands='start', state=None)
@@ -54,6 +47,7 @@ async def first_state_voice(message):
 
 
 async def set_theme(name, text, answer):
+    pyperclip.copy(text)
     print_log(name, 'theme', text)
     await set_state('enable')
     await answer('Отлично, я готов к использованию')
