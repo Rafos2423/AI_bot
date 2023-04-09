@@ -2,8 +2,8 @@ from aiogram import types
 from Generate.generate import msg_history
 from Generate.generate_events import correct_generate, clear_history
 from config import dp
-from engine import change_state
 from Buttons.buttons import keyboard_yes_no
+from engine import set_state
 
 
 @dp.message_handler(lambda x: x.text == 'Повтор 🔄' and len(msg_history) > 1, state='enable')
@@ -26,7 +26,7 @@ async def new_chat(query):
 
 @dp.callback_query_handler(text='no', state='new_chat')
 async def back(query):
-    await change_state('enable')
+    await set_state('enable')
     await query.message.answer('Давай продолжим')
 
 

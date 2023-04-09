@@ -13,7 +13,7 @@ async def correct_generate(name, text, answer):
     try:
         result = await start_generate(name, text)
     except ChildProcessError:
-        print_msg_log(name, "no tokens", "clear")
+        print_log(name, "clear", 'Закончились токены')
         await clear_history(name)
         await answer('Количество ответов аи закончилось. Придется начать новый диалог, выбрав новую тему /start', reply_markup=None)
     else:
@@ -21,15 +21,15 @@ async def correct_generate(name, text, answer):
 
 
 async def start_generate(name, text):
-    print_msg_log(name, text, 'ask')
+    print_log(name, 'ask', text)
     start = time.time()
     answer = await generate(text)
     duration = round(time.time() - start, 2)
-    print_scs_log(name, answer, 'ans', duration)
+    print_log(name, 'ans', answer, duration)
     return answer
 
 
 async def clear_history(name):
     msg_history.clear()
-    await reset_state()
-    print_log(name, 'clear')
+    await set_state()
+    print_log(name, 'clear', 'Нажата кнопка')

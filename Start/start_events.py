@@ -9,7 +9,7 @@ async def first_state(message):
         await set_state('choose_theme')
         await start(message)
     else:
-        print_msg_log(message.from_user.username, 'Без темы', 'theme')
+        print_log(message.from_user.username, 'theme', 'Без темы')
         await set_state('enable')
         await get_answer(message)
 
@@ -24,7 +24,7 @@ async def start(message):
 async def choose_theme(query):
     if query.data == 'Без темы':
         await query.message.answer('Можно и так, задавай вопрос')
-        await reset_state()
+        await set_state()
     else:
         await set_theme(query.from_user.username, query.data, query.message.answer)
 
@@ -35,8 +35,7 @@ async def input_theme(message):
 
 
 async def set_theme(name, text, answer):
-    add_msg('system', text)
-    print_msg_log(name, 'theme', text)
-    await change_state('enable')
+    print_log(name, 'theme', text)
+    await set_state('enable')
     await answer('Отлично, я готов к использованию')
 
