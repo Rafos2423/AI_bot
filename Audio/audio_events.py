@@ -1,45 +1,37 @@
+from pydub import AudioSegment
 import aiohttp
-import os
 from aiogram.types import ContentType
-from Generate.generate_events import correct_generate
+from Generate.generate_events import correct_generate, clear_history
 from config import bot, dp, api_key
 from engine import print_log
 
 
-@dp.message_handler(content_types=[
-    ContentType.VOICE,
-    ContentType.AUDIO,
-    ContentType.DOCUMENT
-])
+@dp.message_handler(content_types=ContentType.VOICE)
 async def voice_message_handler(message):
-    file_id = await check(message)
-    if file_id is None:
-        return
-
-    file_path = await save(message.from_user.username, file_id)
-    text = await send_request(file_path)
-    os.remove(file_path)
-    await correct_generate(message.from_user.username, text, message.answer)
-
-
-async def check(message):
-    if message.content_type == ContentType.VOICE:
-        return message.voice.file_id
-    elif message.content_type == ContentType.AUDIO:
-        return message.audio.file_id
-    elif message.content_type == ContentType.DOCUMENT:
-        return message.document.file_id
+    print_log(message.from_user.username, 'aud')
+    file_name = await save(message.voice.file_id)
+    file_name = convert(file_name)
+    try:
+        text = await send_request(file_name)
+    except ChildProcessError:
+        await clear_history(message.from_user.username, 'Закончились токены')
     else:
-        await message.answer('Принимаю только текст или аудио')
-        return None
+        await correct_generate(message.from_user.username, text, message.answer)
 
 
-async def save(name, file_id):
-    print_log(name, 'aud')
+async def save(file_id):
     file = await bot.get_file(file_id)
-    path = f'Audio/{file.file_path}'
-    await bot.download_file(file.file_path, path)
-    return path
+    file_path = file.file_path
+    file_name = f'Audio/files/{file_id}'
+    await bot.download_file(file_path, file_name)
+    return file_name
+
+
+def convert(file):
+    output_file = f"{file.split('.')[0]}.mp3"
+    sound = AudioSegment.from_file(file)
+    sound.export(output_file, format="mp3", bitrate="128k")
+    return output_file
 
 
 async def send_request(filename):
@@ -51,6 +43,6 @@ async def send_request(filename):
         data.add_field('model', 'whisper-1')
         async with session.post(api_url, headers=headers, data=data) as response:
             if response.status == 402:
-                raise Exception()
+                raise ChildProcessError
             result = await response.json()
             return result['text']

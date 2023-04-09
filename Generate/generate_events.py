@@ -1,3 +1,4 @@
+import os
 from Generate.generate import msg_history, generate
 from engine import *
 from Buttons.buttons import keyboard
@@ -13,8 +14,7 @@ async def correct_generate(name, text, answer):
     try:
         result = await start_generate(name, text)
     except ChildProcessError:
-        print_log(name, "clear", 'Закончились токены')
-        await clear_history(name)
+        await clear_history(name, 'Закончились токены')
         await answer('Количество ответов аи закончилось. Придется начать новый диалог, выбрав новую тему /start', reply_markup=None)
     else:
         await answer(result, reply_markup=keyboard)
@@ -29,7 +29,11 @@ async def start_generate(name, text):
     return answer
 
 
-async def clear_history(name):
+async def clear_history(name, reason):
     msg_history.clear()
     await set_state()
-    print_log(name, 'clear', 'Нажата кнопка')
+    print_log(name, 'clear', reason)
+    try:
+        os.remove('Audio/files')
+    except FileNotFoundError:
+        pass

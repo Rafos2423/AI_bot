@@ -20,13 +20,12 @@ async def new_chat_menu(message):
 
 @dp.callback_query_handler(text='yes', state='enable')
 async def new_chat(query):
-    await clear_history(query.from_user.username)
+    await clear_history(query.from_user.username, 'Нажата кнопка')
     await query.message.answer(f'Сообщения удалены. Можно выбрать новую тему /start', reply_markup=types.ReplyKeyboardRemove())
 
 
-@dp.callback_query_handler(text='no', state='new_chat')
+@dp.callback_query_handler(text='no', state='enable')
 async def back(query):
-    await set_state('enable')
     await query.message.answer('Давай продолжим')
 
 

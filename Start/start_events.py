@@ -3,7 +3,15 @@ from engine import *
 from Generate.generate_events import get_answer
 
 
-@dp.message_handler(lambda x: x.text == '/start' or is_msg(x.text), reply_markup=None)
+@dp.message_handler(lambda x: x.text == '/info')
+async def info(message):
+    await message.answer('Бот позволяет получать ответы с помощью API OpenAI на текстовые и аудио сообщения.\n'
+                         'Ограничения на аудио:\n'
+                         'Размер: 25 мб\n'
+                         'Формат: mp3, mp4, mpeg, mpga, m4a, wav, webm')
+
+
+@dp.message_handler(lambda x: x.text == '/start' or is_msg(x.text))
 async def first_state(message):
     if message.text == '/start':
         await set_state('choose_theme')

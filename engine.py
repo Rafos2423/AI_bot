@@ -15,15 +15,15 @@ async def set_state(name=''):
 def print_log(name, tag='', text='', duration=''):
     dash = Fore.WHITE + '-'
     tag = f'{dash} {color_tag(tag)}'
-    length = ''
 
     if text != '':
-        length = f'{dash} {Fore.LIGHTMAGENTA_EX + str(len(text))} {dash} '
-        text = f'{Fore.LIGHTWHITE_EX + text}'
+        text = text.replace('\n', '')
+        text = f'{dash} {Fore.LIGHTMAGENTA_EX + str(len(text))} ' \
+               f'{dash} {Fore.LIGHTWHITE_EX + text}'
     if duration != '':
-        duration = f'{Fore.LIGHTCYAN_EX + str(duration)}s {dash} '
+        duration = f'{dash} {Fore.LIGHTCYAN_EX + str(duration)}s '
 
-    logger.info(f'@{name} {tag} {length}{duration}{text}')
+    logger.info(f'@{name} {tag} {duration}{text}')
 
 
 def color_tag(tag):
