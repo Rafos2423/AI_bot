@@ -14,18 +14,20 @@ async def repeat(message):
 
 @dp.message_handler(lambda x: x.text == 'Новый чат ⏩' and len(msg_history) > 1, state='enable')
 async def new_chat_menu(message):
+    await set_state('choose')
     theme = f'на тему {msg_history[0]["content"]} ' if msg_history[0]['role'] == 'system' else ''
     await message.answer(f'Память аи {theme}будет очищена. Начать новый чат?', reply_markup=keyboard_yes_no)
 
 
-@dp.callback_query_handler(text='yes', state='enable')
+@dp.callback_query_handler(text='yes', state='choose')
 async def new_chat(query):
     await clear_history(query.from_user.username, 'Нажата кнопка')
     await query.message.answer(f'Сообщения удалены. Можно выбрать новую тему /start', reply_markup=types.ReplyKeyboardRemove())
 
 
-@dp.callback_query_handler(text='no', state='enable')
+@dp.callback_query_handler(text='no', state='choose')
 async def back(query):
+    await set_state('enable')
     await query.message.answer('Давай продолжим')
 
 

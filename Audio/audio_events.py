@@ -6,17 +6,29 @@ from config import bot, dp, api_key
 from engine import print_log
 
 
-@dp.message_handler(content_types=ContentType.VOICE)
-async def voice_message_handler(message):
-    print_log(message.from_user.username, 'aud')
-    file_name = await save(message.voice.file_id)
-    file_name = convert(file_name)
+@dp.message_handler(content_types=ContentType.VOICE, state='enable')
+async def get_answer_voice(message):
+    text = await voice_to_text(message.from_user.username, message.voice.file_id, message.answer)
+    if not text is None:
+        await correct_generate(message.from_user.username, text, message.answer)
+
+
+async def voice_to_text(name, file_id, answer):
+    print_log(name, 'aud')
+    tg_file_name = await save(file_id)
+    file_name = convert(tg_file_name)
     try:
         text = await send_request(file_name)
+        if len(text) == 0:
+            raise ValueError
     except ChildProcessError:
-        await clear_history(message.from_user.username, 'Закончились токены')
+        await clear_history(name, 'Закончились токены')
+        await answer('Количество ответов аи закончилось. Придется начать новый диалог, выбрав новую тему /start', reply_markup=None)
+    except ValueError:
+        print_log(name, 'no text')
+        await answer('AI не смог распознать сообщение')
     else:
-        await correct_generate(message.from_user.username, text, message.answer)
+        return text
 
 
 async def save(file_id):

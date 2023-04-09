@@ -1,4 +1,5 @@
 import os
+import shutil
 from Generate.generate import msg_history, generate
 from engine import *
 from Buttons.buttons import keyboard
@@ -34,6 +35,6 @@ async def clear_history(name, reason):
     await set_state()
     print_log(name, 'clear', reason)
     try:
-        os.remove('Audio/files')
+        shutil.rmtree('Audio/files')
     except FileNotFoundError:
         pass
