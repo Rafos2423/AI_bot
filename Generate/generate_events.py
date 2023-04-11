@@ -22,6 +22,8 @@ async def correct_generate(name, text, answer):
     except SystemError:
         await clear_history(name, 'Внутренняя ошибка')
         await answer('Произошла внутренняя ошибка. Придется начать новый диалог, можно выбрать новую тему /start', reply_markup=None)
+    except TimeoutError:
+        await answer('Превышено ожидание от АИ. Попробуйте задать более конкретный вопрос')
     else:
         await answer(result, reply_markup=keyboard)
 
@@ -38,7 +40,7 @@ async def start_generate(name, text):
 
 async def clear_history(name, reason):
     user_id = take_user_id(name)
-    msg_history[user_id].clear()
+    msg_history.pop(user_id)
     await set_state()
     print_log(name, 'clear', reason)
     try:
