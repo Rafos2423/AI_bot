@@ -1,4 +1,3 @@
-import pyperclip
 from pydub import AudioSegment
 import aiohttp
 from aiogram.types import ContentType
@@ -9,9 +8,9 @@ from engine import print_log
 
 @dp.message_handler(content_types=ContentType.VOICE, state='enable')
 async def get_answer_voice(message):
-    text = await voice_to_text(message.from_user.username, message.voice.file_id, message.answer)
+    text = await voice_to_text(message.from_user, message.voice.file_id, message.answer)
     if not text is None:
-        await correct_generate(message.from_user.username, text, message.answer)
+        await correct_generate(message.from_user, text, message.answer)
 
 
 async def voice_to_text(name, file_id, answer):

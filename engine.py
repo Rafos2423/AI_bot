@@ -14,6 +14,8 @@ async def set_state(name=''):
 
 def print_log(name, tag='', text='', duration=''):
     dash = Fore.WHITE + '-'
+
+    name = take_user_id(name)
     tag = f'{dash} {color_tag(tag)}'
 
     if text != '':
@@ -24,6 +26,10 @@ def print_log(name, tag='', text='', duration=''):
         duration = f'{dash} {Fore.LIGHTCYAN_EX + str(duration)}s '
 
     logger.info(f'@{name} {tag} {duration}{text}')
+
+
+def take_user_id(user):
+    return user.username if not user.username is None else user.id
 
 
 def color_tag(tag):

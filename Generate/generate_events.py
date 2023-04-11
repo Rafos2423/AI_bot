@@ -8,7 +8,7 @@ import time
 
 @dp.message_handler(lambda x: is_msg(x.text), state='enable')
 async def get_answer(message):
-    await correct_generate(message.from_user.username, message.text, message.answer)
+    await correct_generate(message.from_user, message.text, message.answer)
 
 
 async def correct_generate(name, text, answer):
@@ -29,14 +29,16 @@ async def correct_generate(name, text, answer):
 async def start_generate(name, text):
     print_log(name, 'ask', text)
     start = time.time()
-    answer = await generate(text)
+    user_id = take_user_id(name)
+    answer = await generate(user_id, text)
     duration = round(time.time() - start, 2)
     print_log(name, 'ans', answer, duration)
     return answer
 
 
 async def clear_history(name, reason):
-    msg_history.clear()
+    user_id = take_user_id(name)
+    msg_history[user_id].clear()
     await set_state()
     print_log(name, 'clear', reason)
     try:
