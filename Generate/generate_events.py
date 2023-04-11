@@ -19,6 +19,9 @@ async def correct_generate(name, text, answer):
     except ChildProcessError:
         await clear_history(name, 'Закончились токены')
         await answer('Количество ответов аи закончилось. Придется начать новый диалог, выбрав новую тему /start', reply_markup=None)
+    except SystemError:
+        await clear_history(name, 'Внутренняя ошибка')
+        await answer('Произошла внутренняя ошибка. Придется начать новый диалог, можно выбрать новую тему /start', reply_markup=None)
     else:
         await answer(result, reply_markup=keyboard)
 

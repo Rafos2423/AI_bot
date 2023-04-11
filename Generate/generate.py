@@ -28,4 +28,6 @@ async def send_request():
         async with session.post(api_url, headers=headers, json=data) as response:
             if response.status == 402:
                 raise ChildProcessError()
+            if response.status == 400:
+                raise SystemError
             return await response.text()

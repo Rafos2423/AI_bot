@@ -24,7 +24,10 @@ async def voice_to_text(name, file_id, answer):
             raise ValueError
     except ChildProcessError:
         await clear_history(name, 'Закончились токены')
-        await answer('Количество ответов аи закончилось. Придется начать новый диалог, выбрав новую тему /start', reply_markup=None)
+        await answer('Количество ответов аи закончилось. Придется начать новый диалог, можно выбрать новую тему /start', reply_markup=None)
+    except SystemError:
+        await clear_history(name, 'Внутренняя ошибка')
+        await answer('Произошла внутренняя ошибка. Придется начать новый диалог, можно выбрать новую тему /start', reply_markup=None)
     except ValueError:
         print_log(name, 'no text')
         await answer('AI не смог распознать сообщение')
@@ -57,5 +60,7 @@ async def send_request(filename):
         async with session.post(api_url, headers=headers, data=data) as response:
             if response.status == 402:
                 raise ChildProcessError
+            if response.status == 400:
+                raise SystemError
             result = await response.json()
             return result['text']
